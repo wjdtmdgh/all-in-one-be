@@ -1,5 +1,8 @@
-package com.seungho.allinonebe;
+package com.seungho.allinonebe.controller;
 
+import com.seungho.allinonebe.dto.MemberRegisterDto;
+import com.seungho.allinonebe.service.MemberService;
+import com.seungho.allinonebe.dto.LoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -16,4 +19,11 @@ public class MemberController {
     public String login(@RequestBody LoginRequestDto requestDto){
         return memberService.login(requestDto);
     }
+
+    @PostMapping
+    public void register(@RequestBody MemberRegisterDto requestDto){
+        log.info("requestDto: {}", requestDto);
+        memberService.register(requestDto);
+    }
+
 }

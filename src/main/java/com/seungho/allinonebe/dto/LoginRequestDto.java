@@ -1,4 +1,4 @@
-package com.seungho.allinonebe;
+package com.seungho.allinonebe.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

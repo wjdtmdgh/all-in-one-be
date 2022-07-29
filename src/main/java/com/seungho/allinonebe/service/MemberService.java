@@ -1,5 +1,9 @@
-package com.seungho.allinonebe;
+package com.seungho.allinonebe.service;
 
+import com.seungho.allinonebe.dto.LoginRequestDto;
+import com.seungho.allinonebe.dto.MemberRegisterDto;
+import com.seungho.allinonebe.entity.Member;
+import com.seungho.allinonebe.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +25,14 @@ public class MemberService {
             return "password incorrect";
         }
         return "email not found";
+    }
+
+    public void register(MemberRegisterDto requestDto){
+        Member member = Member.builder()
+                .email(requestDto.getEmail())
+                .password(requestDto.getPassword())
+                .build();
+
+        memberRepository.save(member);
     }
 }

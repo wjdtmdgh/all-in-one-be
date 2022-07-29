@@ -1,4 +1,4 @@
-package com.seungho.allinonebe;
+package com.seungho.allinonebe.entity;
 
 import lombok.*;
 
