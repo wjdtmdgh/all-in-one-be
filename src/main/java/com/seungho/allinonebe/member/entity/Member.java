@@ -1,5 +1,6 @@
-package com.seungho.allinonebe.entity;
+package com.seungho.allinonebe.member.entity;
 
+import com.seungho.allinonebe.common.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "member")
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,9 +1,9 @@
-package com.seungho.allinonebe.service;
+package com.seungho.allinonebe.member.service;
 
-import com.seungho.allinonebe.dto.LoginRequestDto;
-import com.seungho.allinonebe.dto.MemberRegisterDto;
-import com.seungho.allinonebe.entity.Member;
-import com.seungho.allinonebe.repository.MemberRepository;
+import com.seungho.allinonebe.member.dto.LoginRequestDto;
+import com.seungho.allinonebe.member.dto.MemberRegisterDto;
+import com.seungho.allinonebe.member.entity.Member;
+import com.seungho.allinonebe.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
