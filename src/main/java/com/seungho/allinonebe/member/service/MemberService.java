@@ -7,6 +7,7 @@ import com.seungho.allinonebe.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -20,14 +21,18 @@ public class MemberService {
         if(result.isPresent()){
             Member member = result.get();
             if(requestDto.getPassword().equals(member.getPassword())) {
-                return "login success";
+                return "token_login_abcd1234";
             }
-            return "password incorrect";
+            throw new RuntimeException("비밀번호 불일치");
         }
-        return "email not found";
+        throw new RuntimeException("가입한 회원이 아님");
     }
 
+    @Transactional
     public void register(MemberRegisterDto requestDto){
+        memberRepository.findByEmail(requestDto.getEmail())
+                .ifPresent((tmp) -> {throw new RuntimeException();});
+
         Member member = Member.builder()
                 .email(requestDto.getEmail())
                 .password(requestDto.getPassword())
