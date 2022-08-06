@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+@Data
 @Builder
 @AllArgsConstructor
-@Data
 public class LoginRequestDto {
     private String email;
     private String password;
