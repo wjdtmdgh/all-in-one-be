@@ -39,6 +39,24 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
+    public ArticleDto getArticleDetail(Long articleId){
+        return articleRepository.findById(articleId)
+                .map(article -> {
+                    Member member = memberRepository.findById(article.getWriterId())
+                            .orElseThrow(RuntimeException::new);
+                    return ArticleDto.builder()
+                            .id(article.getId())
+                            .title(article.getTitle())
+                            .contents(article.getContents())
+                            .writerId(article.getWriterId())
+                            .writerName(member.getName())
+                            .language(article.getLanguage())
+                            .pageView(article.getPageView())
+                            .favoriteCount(article.getFavoriteCount())
+                            .build();
+                }).orElseThrow(RuntimeException::new);
+    }
+
     public ArticleDto registerArticle(ArticleRegisterDto registerDto){
         Article article = articleRepository.save(Article.builder()
                 .title(registerDto.getTitle())

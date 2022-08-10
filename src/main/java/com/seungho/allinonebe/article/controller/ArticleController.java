@@ -23,6 +23,11 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.getArticlePage());
     }
 
+    @GetMapping("/{articleId}")
+    public ResponseEntity<ArticleDto> getArticlePage(@PathVariable(name = "articleId") Long articleId){
+        return ResponseEntity.ok(articleService.getArticleDetail(articleId));
+    }
+
     @PostMapping
     public ResponseEntity<ArticleDto> registerArticle(@RequestBody ArticleRegisterDto registerDto){
         return ResponseEntity.ok(articleService.registerArticle(registerDto));
