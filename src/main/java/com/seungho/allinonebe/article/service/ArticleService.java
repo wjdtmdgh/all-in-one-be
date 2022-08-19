@@ -21,7 +21,6 @@ public class ArticleService {
     public List<ArticleDto> getArticlePage(){
         return articleRepository.findAll().stream()
                 .map(article -> {
-
                     Member member = memberRepository.findById(article.getWriterId())
                             .orElseThrow(RuntimeException::new);
 

@@ -24,7 +24,7 @@ public class ArticleController {
     }
 
     @GetMapping("/{articleId}")
-    public ResponseEntity<ArticleDto> getArticlePage(@PathVariable(name = "articleId") Long articleId){
+    public ResponseEntity<ArticleDto> getArticleDetail(@PathVariable(name = "articleId") Long articleId){
         return ResponseEntity.ok(articleService.getArticleDetail(articleId));
     }
 
