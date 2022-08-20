@@ -37,4 +37,16 @@ public class Article extends BaseEntity {
 
     @Column(name = "favorite_count", nullable = false)
     private Long favoriteCount;
+
+    public void changeTitle(String title){
+        this.title = title;
+    }
+
+    public void changeContents(String contents){
+        this.contents = contents;
+    }
+
+    public void changeLanguage(String language){
+        this.language = language;
+    }
 }

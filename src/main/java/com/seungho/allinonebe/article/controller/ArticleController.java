@@ -1,6 +1,7 @@
 package com.seungho.allinonebe.article.controller;
 
 import com.seungho.allinonebe.article.dto.ArticleDto;
+import com.seungho.allinonebe.article.dto.ArticleModifyDto;
 import com.seungho.allinonebe.article.dto.ArticleRegisterDto;
 import com.seungho.allinonebe.article.service.ArticleService;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,10 @@ public class ArticleController {
     @PostMapping
     public ResponseEntity<ArticleDto> registerArticle(@RequestBody ArticleRegisterDto registerDto){
         return ResponseEntity.ok(articleService.registerArticle(registerDto));
+    }
+
+    @PatchMapping("/{articleId}")
+    public ResponseEntity<ArticleDto> modifyArticle(@PathVariable(name = "articleId") Long articleId, @RequestBody ArticleModifyDto modifyDto){
+        return ResponseEntity.ok(articleService.modifyArticle(articleId, modifyDto));
     }
 }

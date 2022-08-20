@@ -1,6 +1,7 @@
 package com.seungho.allinonebe.article.service;
 
 import com.seungho.allinonebe.article.dto.ArticleDto;
+import com.seungho.allinonebe.article.dto.ArticleModifyDto;
 import com.seungho.allinonebe.article.dto.ArticleRegisterDto;
 import com.seungho.allinonebe.article.entity.Article;
 import com.seungho.allinonebe.article.repository.ArticleRepository;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,6 +68,42 @@ public class ArticleService {
                 .pageView(0L)
                 .favoriteCount(0L)
                 .build());
+
+        Member member = memberRepository.findById(article.getWriterId())
+                .orElseThrow(RuntimeException::new);
+
+        return ArticleDto.builder()
+                .id(article.getId())
+                .title(article.getTitle())
+                .contents(article.getContents())
+                .writerId(article.getWriterId())
+                .writerName(member.getName())
+                .language(article.getLanguage())
+                .pageView(article.getPageView())
+                .favoriteCount(article.getFavoriteCount())
+                .build();
+    }
+
+    public ArticleDto modifyArticle(Long articleId, ArticleModifyDto modifyDto){
+        // TODO 글 작성자인지 확인 로직 추가
+        Optional<Article> result = articleRepository.findById(articleId);
+
+        if(result.isEmpty())
+            throw new RuntimeException();
+
+        Article article = result.get();
+
+        if(Objects.nonNull(modifyDto.getTitle())){
+            article.changeTitle(modifyDto.getTitle());
+        }
+        if(Objects.nonNull(modifyDto.getContents())){
+            article.changeContents(modifyDto.getContents());
+        }
+        if(Objects.nonNull(modifyDto.getLanguage())){
+            article.changeLanguage(modifyDto.getLanguage());
+        }
+
+        articleRepository.save(article);
 
         Member member = memberRepository.findById(article.getWriterId())
                 .orElseThrow(RuntimeException::new);
