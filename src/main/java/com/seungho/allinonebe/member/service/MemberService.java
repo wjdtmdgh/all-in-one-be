@@ -2,43 +2,66 @@ package com.seungho.allinonebe.member.service;
 
 import com.seungho.allinonebe.member.dto.LoginRequestDto;
 import com.seungho.allinonebe.member.dto.MemberRegisterDto;
+import com.seungho.allinonebe.member.dto.MemberResponse;
+import com.seungho.allinonebe.member.dto.TokenResponse;
 import com.seungho.allinonebe.member.entity.Member;
 import com.seungho.allinonebe.member.repository.MemberRepository;
+import com.seungho.allinonebe.security.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder bCryptPasswordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
 
-    public String login(LoginRequestDto requestDto){
-        Optional<Member> result = memberRepository.findByEmail(requestDto.getEmail());
-        if(result.isPresent()){
-            Member member = result.get();
-            if(requestDto.getPassword().equals(member.getPassword())) {
-                return "token_login_abcd1234";
-            }
-            throw new RuntimeException("비밀번호 불일치");
+
+    public ResponseEntity<TokenResponse> login(LoginRequestDto requestDto){
+        try {
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(requestDto.getEmail(), requestDto.getPassword());
+            Authentication authentication = authenticationManager.authenticate(token);
+            TokenResponse tokenResponse = new TokenResponse(jwtTokenProvider.generateToken(authentication));
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add("Authorization", "Bearer " + tokenResponse.getToken());
+
+            return new ResponseEntity<>(tokenResponse, httpHeaders, HttpStatus.OK);
+        } catch (AuthenticationException e) {
+            throw new RuntimeException("Invalid credentials supplied");
         }
-        throw new RuntimeException("가입한 회원이 아님");
     }
 
     @Transactional
-    public void register(MemberRegisterDto requestDto){
+    public MemberResponse register(MemberRegisterDto requestDto){
         memberRepository.findByEmail(requestDto.getEmail())
-                .ifPresent((tmp) -> {throw new RuntimeException();});
+                .ifPresent((tmp) -> {throw new RuntimeException("이미 가입한 회원입니다.");});
 
         Member member = Member.builder()
                 .email(requestDto.getEmail())
                 .name(requestDto.getName())
-                .password(requestDto.getPassword())
+                .password(bCryptPasswordEncoder.encode(requestDto.getPassword()))
                 .build();
 
-        memberRepository.save(member);
+        member = memberRepository.save(member);
+
+        return MemberResponse.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .build();
     }
+
 }

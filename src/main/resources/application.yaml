@@ -12,3 +12,8 @@ spring.jpa:
 
 hibernate:
   dialect: org.hibernate.dialect.MySQL8Dialect
+
+jwt:
+  token:
+    secret-key: all-in-one
+    expire-length: 300000
