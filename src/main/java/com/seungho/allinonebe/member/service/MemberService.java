@@ -34,7 +34,13 @@ public class MemberService {
         try {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(requestDto.getEmail(), requestDto.getPassword());
             Authentication authentication = authenticationManager.authenticate(token);
-            TokenResponse tokenResponse = new TokenResponse(jwtTokenProvider.generateToken(authentication));
+            Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(RuntimeException::new);
+            TokenResponse tokenResponse = TokenResponse.builder()
+                    .id(member.getId())
+                    .name(member.getName())
+                    .email(requestDto.getEmail())
+                    .token(jwtTokenProvider.generateToken(authentication))
+                    .build();
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add("Authorization", "Bearer " + tokenResponse.getToken());

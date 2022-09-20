@@ -9,5 +9,8 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class TokenResponse {
+    private Long id;
+    private String name;
+    private String email;
     private String token;
 }
