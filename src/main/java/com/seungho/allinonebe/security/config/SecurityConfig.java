@@ -34,29 +34,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Disable csrf to use token
-        http
-                .csrf().disable();
+        http.csrf().disable();
 
         //
-        http
-                .authorizeRequests()
-                .antMatchers(
-                        "/",
-                        "/members",
-                        "/members/login",
-                        "/favicon.ico"
-                ).permitAll()
+        http.authorizeRequests()
+                .antMatchers("/**")
+                .permitAll()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .anyRequest().authenticated();
 
         // No session will be created or used by spring security
-        http
-                .sessionManagement()
+        http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // exception handling for jwt
-        http
-                .exceptionHandling()
+        http.exceptionHandling()
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
