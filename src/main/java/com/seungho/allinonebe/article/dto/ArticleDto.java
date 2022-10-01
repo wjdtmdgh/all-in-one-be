@@ -14,6 +14,7 @@ public class ArticleDto {
     private String title;
     private String contents;
     private Long writerId;
+    private String writerEmail;
     private String writerName;
     private String language;
     private Long pageView;
